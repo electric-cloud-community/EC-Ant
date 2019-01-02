@@ -1,0 +1,19 @@
+<?xml version='1.0' standalone='yes'?>
+<fileset>
+  <file>
+    <path>ec_setup.pl</path>
+    <xpath>//property[propertyName=&quot;ec_setup&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>antDriver.pl</path>
+    <xpath>//procedure[procedureName=&quot;runAnt&quot;]/step[stepName=&quot;createCommandLine&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>wizardCustomEditor.xml</path>
+    <xpath>//procedure[procedureName=&quot;runAnt&quot;]/propertySheet/property[propertyName=&quot;ec_parameterForm&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>postp_matchers.pl</path>
+    <xpath>//property[propertyName=&quot;postp_matchers&quot;]/value</xpath>
+  </file>
+</fileset>
