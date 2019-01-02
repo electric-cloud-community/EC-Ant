@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+  <meta content="text/html; charset=us-ascii" http-equiv=
+  "content-type" />
+
+  <title>ElectricFlow Plugin for Ant</title>
+  <link rel="stylesheet" href="../../plugins/EC-Ant/pluginhelp.css"
+  type="text/css" media="screen" />
+</head>
+
+<body>
+  <div class="help">
+    <h1>Ant</h1>
+
+    <p>Plugin Version: @PLUGIN_VERSION@</p>
+    <hr style=
+    "margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;"
+    noshade="noshade" />
+	
+	<p>Revised on July 1, 2015</p>
+	
+<h1>Contents</h1>
+
+    <ul>
+    <li><p><a href="#overview">Overview</a></p></li>
+    <li><p><a href="#procedures">Plugin Procedures</a></p></li>
+    <li><p><a href="#example">Examples and Use Cases</a></p></li>
+    <li><p><a href="#rns">Release Notes</a></p></li>
+    </ul>
+
+<h1 id="overview">Overview</h1>
+	
+    <!-- The tool description should answer these kinds of questions:
+    What is the tool itself is used for in the development
+    process? Who would use this tool? What is the general use-case or
+    problem that this tool solves? Look at the tool's documentation or
+    website(s) to get their own descriptions. Look at Wikipedia or other
+    outside websites. If there is a Hudson plugin, read their
+    documentation for ideas, examples, etc. It's OK to copy word-for-word
+    only if appropriate, such as FOSS - but not commercial software.
+    -->
+
+    <p>Ant (Another Neat Tool) is a build tool created by Apache.
+    Ant helps automate frequently-run tasks and provides an
+    easy-to-use tool that needs only an XML file with the
+    definition of generic tasks with the job to be done.</p>
+
+    <h2>Ant Links</h2>
+
+    <ul>
+      <li><a href="http://ant.apache.org/">Ant home page</a></li>
+    </ul>
+
+    <h2>ElectricFlow Integration to Ant</h2>
+    <!-- The integration description should answer the questions:
+    What mechanism does the plugin use to integrate with the tool (commandline, REST, HTTP, DCOM, etc.)
+    How deep does our integration go? Why should I care? What general
+    functionality does the plugin include? What functionality does
+    the plugin omit?
+    -->
+
+    <p>This plugin lets you run Ant against a buildfile that you provide.</p>
+
+    <h2>Integrated Version</h2>
+
+    <p>This plugin is developed and tested against Ant version
+    1.8.2.</p>
+
+    <h1 id="procedures">Plugin Procedures</h1>
+
+    <p>IMPORTANT: For all parameter descriptions below, required
+    parameters are shown in <span class='required'>bold
+    italics</span>.</p>
+	
+	<p>IMPORTANT: In the ElectricFlow UI, go to the Home page, open the Main Menu, and click <b>Admin</b> > <b>Plugins</b> to open the Plugin Manager.</p>
+
+    <div id="RunAnt">
+      <a name='RunAnt' id="RunAnt"></a>
+
+      <h2>Run Ant</h2>
+
+      <p>Run Ant against a specific buildfile. A job can be defined
+      using this procedure. Options for running this can also be set.</p>
+	  <p>IMPORTANT: This plugin allows a full customization of postprocessors. To see a full example, see the <a href="#example">Examples and Use Cases</a> section.</p>
+
+      <table class="grid">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+
+            <th>Description</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Ant Location</td>
+
+            <td>Location of Ant. If only "ant" is entered, the Ant
+            executable must be loaded into the system path. For example, 
+            /path/to/ant <i>or</i> ant.</td>
+          </tr>
+
+          <tr>
+            <td>Build File</td>
+
+            <td>Build file to use. The default is build.xml in the
+            current directory.</td>
+          </tr>
+
+          <tr>
+            <td>Libraries</td>
+
+            <td>Enter one library or directory (or both) per line or enter
+             multiple libraries or directories (or both) by separating them with
+            semicolons.</td>
+          </tr>
+
+          <tr>
+            <td>Properties</td>
+
+            <td>Enter each property in key=value format with multiple
+            properties separated by semicolons.</td>
+          </tr>
+
+          <tr>
+            <td>Property File</td>
+
+            <td>Path to a file containing properties.</td>
+          </tr>
+		  
+		  <tr>
+            <td>Debug</td>
+
+            <td>Enable extra debug information to be
+            generated.</td>
+          </tr>
+		  
+		  <tr>
+            <td>Diagnostics</td>
+
+            <td>Enable diagnostics mode. An Ant diagnostic is
+            executed.</td>
+          </tr>
+		  
+		  <tr>
+            <td>Output Level</td>
+
+            <td>Level of verbosity that is generated
+            and printed by Ant.</td>
+          </tr>
+		  
+		  <tr>
+            <td>Log File</td>
+
+            <td>File into which logging is directed.</td>
+          </tr>
+
+          <tr>
+            <td>Target</td>
+
+            <td>Ant targets to be executed. If targets
+            are not specified, the default target from the selected
+            build file is used.</td>
+          </tr>
+		  
+          <tr>
+            <td>Additional Commands</td>
+
+            <td>Additional commands to be entered.</td>
+          </tr>
+
+		  <tr>
+            <td>Postp Line</td>
+
+            <td>Postp command line to execute. For example, postp --loadProperty /myProject/postp_matchers. If this parameter is blank, the default postp matcher is used.</td>
+          </tr>
+
+          <tr>
+            <td>Working Directory</td>
+
+            <td>Directory from which Ant should be
+            invoked.</td>
+          </tr>
+          <tr>
+                <td>Environment variables</td>
+
+                <td>Environment variables to use during the
+                step execution. To specify an environment variable, use the following Perl syntax:
+                <p>$ENV{'USERNAME'} = "user";</p> <p>You can specify multiple environment variables by separating them with semicolons. For readability, you can add a space after each semicolon, or you can start each environment variable definition on a new line (or you can use a combination of either method). The following example specifies three environment variables: </p>$ENV{'USERNAME1'} = "antuser1"; $ENV{'USERNAME2'} = "antuser1";<p>$ENV{'USERNAME3'} = "antuser3";</p></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h1 id="example">Examples and Use Cases</h1>
+    <!-- This section is for examples and use cases, including screenshots of the new Parameter Panel with example values filled in.
+    Unfortunately, I can't tell you what exactly to put here, but it's OK to put what seems like too much! Include both parameter
+    values and output where appropriate. Use a separate 'h2' header for each example. Under the h2 header try to stay with the style
+    outline used above where possible.
+    -->
+
+    <h2>Run Ant Against a Buildfile</h2>
+
+    <p>To run Ant against a buildfile, enter the following
+    parameters:</p><img src=
+    "../../plugins/EC-Ant/images/RunAntAgainstBuildFile/parameters.png" />
+
+    <p>If the <b>Build File</b> parameter is 
+    blank, Ant looks for a build.xml file in the
+    working directory.</p>
+
+    <p>If you supply a file path to the <b>Log File</b> parameter,
+    information generated by Ant might not be available by clicking the
+    Log icon next to the RunCommandLine step.</p>
+
+    <p>If no target is entered in the <b>Target</b> field, the default
+    target in the build file is used.</p>
+
+    <p>When the job is executed, in the <b>runCommandLine</b> step,
+    click the Log icon to see the Ant build information. The output is
+    similar to the following output:</p><img src=
+    "../../plugins/EC-Ant/images/RunAntAgainstBuildFile/logSample.png" /><br />
+
+
+    <h2>Run Ant Diagnostic</h2>
+
+    <p>To run an Ant diagnostic, enter the following
+    parameters:</p><img src=
+    "../../plugins/EC-Ant/images/RunAntDiagnostic/parameters.png" />
+
+    <p>IMPORTANT: If the <b>Diagnostics</b> parameter is checked, then Diagnostics mode is executed, regardless of whether other parameters are entered.</p>
+
+    <p>When the job is executed, in the <b>runCommandLine</b> step,
+    click the Log icon to see the diagnostic information. The output is
+    similar to the following diagnostic report:</p><img src=
+    "../../plugins/EC-Ant/images/RunAntDiagnostic/logSample.png" />
+	
+	<h2>Extend Default Postprocessors</h2>
+
+	<p>The plugin includes a predefined set of postp matchers, which are used by default. You can change these predefined postp matchers by doing the following: On the "Administration" tab (1) under "Plugins" (2), click the plugin name (3) and then click the "Properties" (4) tab. The property called "postp_matchers" (5) is the default postp matcher. You can add, modify, or remove matchers by clicking on the property name (5), but note that doing this is not recommended, because your changes are overwritten if you upgrade this plugin. </p>
+	
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginsLocation.png" />
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginProperties.png" />
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginPostp.png" />
+	
+	
+	<h2>Create and Use New Custom Postprocessors</h2>
+
+	
+	<p>You can use a different postprocessor by creating a new property. On the "Administration" tab (1) under "Plugins" (2), click the plugin name (3), then click the "Properties" (4) tab, then click the option called "Create Property" (6) to create a new property. In this example, the name of the new property is named "myCustom_postp_matchers". To use it, specify it in the plugin parameter named 'Postp Line' (8) as follows: postp --loadProperty /myProject/myCustom_postp_matchers.</p>
+	
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginsLocation.png" />
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginProperties.png" />
+    <img src= "../../plugins/EC-Ant/images/PostProcessors/PluginNewPostp.png" /><br/>
+	<img src= "../../plugins/EC-Ant/images/PostProcessors/PluginPostpLine.png" />
+
+    <h1 id="rns">Release Notes</h1>
+	
+	    <h2>@PLUGIN_KEY@-2.0.9</h2>
+
+    <ul>
+        <li>
+          Renamed ElectricCommander to ElectricFlow.
+        </li>
+    </ul>
+    
+    <h2>@PLUGIN_KEY@-2.0.8</h2>
+
+    <ul>
+        <li>
+          Fixed an issue where user data was not migrated to the "props" field of the runAnt procedure after the "properties" field was replaced with the "props" field in an earlier version of the plugin.
+        </li>
+    </ul>
+
+    <h2>@PLUGIN_KEY@-2.0.7</h2>
+
+    <ul>
+        <li>Added the ability to set environment variables using Perl syntax.</li>
+    </ul>
+    
+    <h2>@PLUGIN_KEY@-2.0.6</h2>
+
+    <ul>
+        <li>Improved the postp matchers.</li>
+    </ul>
+
+    <h2>@PLUGIN_KEY@-2.0.5</h2>
+
+    <ul>
+        <li>Changed procedure names in the step picker section.</li>
+    </ul>
+    
+    <h2>EC-Ant 2.0.4</h2>
+    
+    <ul>
+        <li>Improved the postp matchers.</li>
+    </ul>
+	
+	<h2>EC-Ant 2.0.3</h2>
+    
+    <ul>
+        <li>Added postp matchers.</li>
+      
+        <li>Made several code improvements.</li>
+    </ul>
+
+    <h2>EC-Ant 2.0.2</h2>
+
+    <ul>
+      <li>Redesigned the form for entering parameters for the runAnt procedure.</li>
+
+      <li>Added a link directly to the new Help document.</li>
+    </ul>
+
+    <h2>EC-Ant 2.0.1</h2>
+
+    <ul>
+      <li>Improved the Help page.</li>
+    </ul>
+
+    <h2>EC-Ant 1.0.4</h2>
+
+    <ul>
+      <li>Made code improvements.</li>
+
+      <li>Fixed an issue where runAnt would run only on the local resource at runtime, even though you specified that it run on another resource.</li>
+    </ul>
+
+    <h2>EC-Ant 1.0.3</h2>
+
+    <ul>
+      <li>Improved the Help page.</li>
+    </ul>
+
+    <h2>EC-Ant 1.0.2</h2>
+
+    <ul>
+      <li>Added the "Postp Line" field and the "Additional Commands" field to the dialog box for running Ant against a buildfile.</li>
+
+      <li>Made code improvements.</li>
+    </ul>
+  </div>
+</body>
+</html>

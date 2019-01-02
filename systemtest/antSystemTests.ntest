@@ -1,0 +1,513 @@
+# -*-Perl-*-
+
+# antSystemTests.ntest -
+#
+# ECAnt
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use warnings;
+use ECTest;
+use ECSelenium;
+
+ 
+# system tests
+
+
+require "$::gTestFileDir/ant-common.ntest";
+
+$::gProjectImported = 0;
+$::gtestProjectName = 'AntTestProject';
+
+my $outcome = '';
+
+########################################################################
+# importProject - imports the test project and asserts that the specified
+#                 procedures exists
+#
+# Arguments:
+#   -none
+#
+# Returns:
+#   -nothing
+#
+########################################################################
+sub importProject() {
+ 
+    #assert project exists and is imported
+    assertOK($::N->import(
+             { file =>"$::gTestFileDir/antSystemTests.xml",
+               path  => "/projects/AntTestProject",
+               force => 1
+             } ), 'import runCommandLine');
+   
+   #assert all given procedures exist
+   
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAnt'),
+    'runAnt procedure doesn\'t exist');
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntOnCustomLocation'),
+    'runAntOnCustomLocation procedure doesn\'t exist');
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithAllOptions'),
+    'runAntWithAllOptions procedure doesn\'t exist'); 
+
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithBuildFile'),
+    'runAntWithBuildFile procedure doesn\'t exist'); 
+
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithCustomTarget'),
+    'runAntWithCustomTarget procedure doesn\'t exist'); 
+    
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithLogAndOutput'),
+    'runAntWithLogAndOutput procedure doesn\'t exist');
+
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithCustomPostp'),
+    'runAntWithCustomPostp procedure doesn\'t exist'); 
+
+    assertOK($::N->getProcedure($::gtestProjectName, 'runAntWithDefaultPostp'),
+    'runAntWithDefaultPostp procedure doesn\'t exist');
+    
+    $::gProjectImported = 1;
+}
+
+########################################################################
+# doSetup - invokes the project import method in case it hasn't been 
+#           executed
+#
+# Arguments:
+#   -none
+#
+# Returns:
+#   -nothing
+#
+########################################################################
+sub doSetup() {
+
+    if(! $::gProjectImported) {
+        importProject();
+    }
+    
+    
+}
+
+ntest "runAnt", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAnt",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $antCommandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+      
+      assertEq('ant', $antCommandLine, 
+           'ant command line doesn\'t match expected output');
+      
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+
+
+  };
+  
+ntest "runAntOnCustomLocation", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntOnCustomLocation",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+      
+      assertEq('C:\cygwin\usr\local\tools\common\apache-ant-1.7.1\bin\ant -diagnostics', $commandLine, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+           
+
+  };
+  
+ntest "runAntWithAllOptions", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithAllOptions",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+      assertEq('ant -propertyfile propfile.properties -Dnet.avantica.value=prop1 -lib C:\cygwin\usr\local\tools\common\apache-ant-1.7.1\bin -buildfile mybuildfile.xml -debug -logfile mylogfile.txt -emacs compile', $commandLine, 
+           'command line doesn\'t match expected output');
+
+      assertEq('antfolder', $workingDir, 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+    ntest "runAntWithBuildFile", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithBuildFile",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+
+      assertEq('ant -buildfile e:\build.xml', $commandLine, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+
+  };
+  
+ntest "runAntWithCustomTarget", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithCustomTarget",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+      assertEq('ant -quiet -logfile logfile.txt mycustomtarget', $commandLine, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+          
+           
+
+  };  
+
+  ntest "runAntWithLogAndOutput", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithLogAndOutput",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $commandLine = $xpath->findvalue("//property[propertyName='commandLine']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+      assertEq('ant -verbose -logfile mylogfile.txt', $commandLine, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+           
+           
+
+  };  
+  
+  
+   ntest "runAntWithCustomPostp", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithCustomPostp",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $postpline = $xpath->findvalue("//property[propertyName='postpline']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+      assertEq('postp --loadProperty /myProject/custom_postp_matchers', $postpline, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+           
+           
+
+  };  
+  
+  ntest "runAntWithDefaultPostp", {}, sub {
+      
+      doSetup();
+      
+      # run test job
+     
+      my $xpath = $::N->runProcedure($::gtestProjectName, 
+              {procedureName => "runAntWithDefaultPostp",
+              pollInterval  => '1',
+              timeout => 600,
+                   actualParameter => [
+                  
+                  ]
+      });
+          
+       
+      # make sure it finished
+      my $jobId = 0;
+      my $status = '';
+      
+      assertOK($xpath, 'runProcedure has errors');
+      if ($xpath) {
+          $jobId  = $xpath->findvalue("//jobId");
+          $status = $xpath->findvalue("//status");
+          $outcome = $xpath->findvalue("//outcome");
+  
+          assertTrue($jobId && $jobId ne "",'valid job id');
+          assertEq('completed',$status,"job $jobId complete");
+  
+          #abort if job did not finish
+          if ($status ne 'completed') {
+              assertOK($::N->abortJob($jobId, {force => 1}));
+          }
+      }
+
+      # get the job details
+      $xpath = $::N->getJobDetails($jobId);
+   
+      # get the value of the commands lines
+      my $postpline = $xpath->findvalue("//property[propertyName='postpline']/value");
+
+      my $workingDir = $xpath->findvalue("//property[propertyName='workingdirectory']/value");
+
+      assertEq('postp --loadProperty /myProject/postp_matchers', $postpline, 
+           'command line doesn\'t match expected output');
+
+      assertEq('', $workingDir, 
+           'working directory doesn\'t match expected output');
+           
+           
+
+  };

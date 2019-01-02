@@ -1,0 +1,98 @@
+<editor>
+  <help>/commander/pages/@PLUGIN_NAME@/@PLUGIN_KEY@_help?s=Administration&amp;ss=Plugins#RunAnt</help>
+	<formElement>
+		<type>entry</type>
+		<label>Ant Location:</label>
+		<property>antlocation</property>
+		<value>ant</value>
+		<documentation>The location of ant. If only "ant" is entered, ant executable must be loaded into the system path. i.e: /path/to/ant or ant</documentation>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Build File:</label>
+		<property>buildfile</property>
+		<documentation>The build file to use.  Default is build.xml in the current directory.</documentation>
+	</formElement>
+	<formElement>
+		<type>textarea</type>
+		<label>Libraries:</label>
+		<property>libraries</property>
+		<documentation>Enter one library and/or directory per line or separate multiple libraries and/or directories with semicolons.</documentation>
+	</formElement>
+	<formElement>
+		<type>textarea</type>
+		<label>Properties:</label>
+		<property>props</property>
+		<documentation>Enter each property as key=value with multiple properties separated by semicolons.</documentation>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Property File:</label>
+		<property>propertyfile</property>
+		<documentation>The path to a file containing properties.</documentation>
+	</formElement>
+	<formElement>
+		<type>checkbox</type>
+		<label>Debug:</label>
+		<property>debug</property>
+		<checkedValue>1</checkedValue>
+		<uncheckedValue>0</uncheckedValue>
+		<required>0</required>
+		<documentation>Enable extra debug information to be generated.</documentation>
+	</formElement>
+	<formElement>
+		<type>checkbox</type>
+		<label>Diagnostics:</label>
+		<property>diagnostics</property>
+		<checkedValue>1</checkedValue>
+		<uncheckedValue>0</uncheckedValue>
+		<required>0</required>
+		<documentation>Enable diagnostics information to be generated.</documentation>
+	</formElement>
+	<formElement>
+		<type>radio</type>
+		<label>Output Level:</label>
+		<property>outputlevel</property>
+		<required>0</required>
+		<documentation>Specify the level of verbosity that is generated and printed by Ant.</documentation>
+		<option><name>Normal</name><value></value></option>
+		<option><name>Quiet</name><value>quiet</value></option>
+		<option><name>Verbose</name><value>verbose</value></option>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Log File:</label>
+		<property>logfile</property>
+		<documentation>Specify the file into which the log will be redirected.</documentation>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Target:</label>
+		<property>target</property>
+		<documentation>Specify the ant targets to be executed. If targets are not specified, the default target from the selected build file will be used.</documentation>
+	</formElement>
+	<formElement>
+		<type>textarea</type>
+		<label>Additional Commands:</label>
+		<property>additionalcommands</property>
+		<documentation>Additional commands to be entered.</documentation>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Postp Line:</label>
+		<property>postpline</property>
+		<documentation>Specify the postp command line to execute i.e. postp --loadProperty /myProject/postp_matchers. If this parameter is left blank the default postp matcher will be used.</documentation>
+	</formElement>
+	<formElement>
+		<type>entry</type>
+		<label>Working Directory:</label>
+		<property>workingdirectory</property>
+		<documentation>The directory from which ant should be invoked.</documentation>
+	</formElement>
+    <formElement>
+            <type>textarea</type>
+            <label>Environment Variables:</label>
+            <property>envVariables</property>
+            <documentation>Set Environment variables (if required) using perl syntax. (e.g. $ENV{'JAVA_HOME'}="C:\cygwin\usr\local\tools\i686_win32\jdk1.6.0_30";)</documentation>
+    </formElement>
+</editor>
