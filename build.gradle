@@ -20,7 +20,7 @@ buildscript {
 
 group = 'com.electriccloud'
 description = 'Plugins : EC-Ant'
-version = '2.0.9'
+version = '2.0.10'
 
 apply plugin: 'flow-gradle-plugin'
 apply plugin: 'license'
